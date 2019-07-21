@@ -9,6 +9,7 @@ export default class ParallaxImage extends Component {
 
     static propTypes = {
         ...Image.propTypes,
+        ImageLoader: PropTypes.object,  
         carouselRef: PropTypes.object, // passed from <Carousel />
         itemHeight: PropTypes.number, // passed from <Carousel />
         itemWidth: PropTypes.number, // passed from <Carousel />
@@ -139,6 +140,7 @@ export default class ParallaxImage extends Component {
     get image () {
         const { status, animOpacity, offset, width, height } = this.state;
         const {
+            ImageLoader,
             scrollPosition,
             dimensions,
             vertical,
@@ -146,6 +148,7 @@ export default class ParallaxImage extends Component {
             sliderHeight,
             parallaxFactor,
             style,
+            source,
             ...other
         } = this.props;
 
@@ -173,9 +176,20 @@ export default class ParallaxImage extends Component {
             ] : []
         };
 
+        if(ImageLoader) {
+            return (
+                <ImageLoader
+                    onLoad={this._onLoad}
+                    uri={source} 
+                    style={[styles.image, style, requiredStyles, dynamicStyles]}
+                />
+            );
+        }
+
         return (
             <Animated.Image
               {...other}
+              source={source}
               style={[styles.image, style, requiredStyles, dynamicStyles]}
               onLoad={this._onLoad}
               onError={status !== 3 ? this._onError : undefined} // prevent infinite-loop bug
