@@ -9,7 +9,7 @@ export default class ParallaxImage extends Component {
 
     static propTypes = {
         ...Image.propTypes,
-        ImageLoader: PropTypes.object,  
+        ImageLoader: PropTypes.function,
         carouselRef: PropTypes.object, // passed from <Carousel />
         itemHeight: PropTypes.number, // passed from <Carousel />
         itemWidth: PropTypes.number, // passed from <Carousel />
@@ -36,7 +36,7 @@ export default class ParallaxImage extends Component {
         spinnerColor: 'rgba(0, 0, 0, 0.4)'
     }
 
-    constructor (props) {
+    constructor(props) {
         super(props);
         this.state = {
             offset: 0,
@@ -50,11 +50,11 @@ export default class ParallaxImage extends Component {
         this._measureLayout = this._measureLayout.bind(this);
     }
 
-    setNativeProps (nativeProps) {
+    setNativeProps(nativeProps) {
         this._container.setNativeProps(nativeProps);
     }
 
-    componentDidMount () {
+    componentDidMount() {
         this._mounted = true;
 
         setTimeout(() => {
@@ -62,11 +62,11 @@ export default class ParallaxImage extends Component {
         }, 0);
     }
 
-    componentWillUnmount () {
+    componentWillUnmount() {
         this._mounted = false;
     }
 
-    _measureLayout () {
+    _measureLayout() {
         if (this._container) {
             const {
                 dimensions,
@@ -101,7 +101,7 @@ export default class ParallaxImage extends Component {
         }
     }
 
-    _onLoad (event) {
+    _onLoad(event) {
         const { animOpacity } = this.state;
         const { fadeDuration, onLoad } = this.props;
 
@@ -127,7 +127,7 @@ export default class ParallaxImage extends Component {
     }
 
     // If arg is missing from method signature, it just won't be called
-    _onError (event) {
+    _onError(event) {
         const { onError } = this.props;
 
         this.setState({ status: 4 });
@@ -137,7 +137,7 @@ export default class ParallaxImage extends Component {
         }
     }
 
-    get image () {
+    get image() {
         const { status, animOpacity, offset, width, height } = this.state;
         const {
             ImageLoader,
@@ -176,11 +176,11 @@ export default class ParallaxImage extends Component {
             ] : []
         };
 
-        if(ImageLoader) {
+        if (ImageLoader) {
             return (
                 <ImageLoader
                     onLoad={this._onLoad}
-                    uri={source} 
+                    uri={source}
                     style={[styles.image, style, requiredStyles, dynamicStyles]}
                 />
             );
@@ -188,42 +188,42 @@ export default class ParallaxImage extends Component {
 
         return (
             <Animated.Image
-              {...other}
-              source={source}
-              style={[styles.image, style, requiredStyles, dynamicStyles]}
-              onLoad={this._onLoad}
-              onError={status !== 3 ? this._onError : undefined} // prevent infinite-loop bug
+                {...other}
+                source={source}
+                style={[styles.image, style, requiredStyles, dynamicStyles]}
+                onLoad={this._onLoad}
+                onError={status !== 3 ? this._onError : undefined} // prevent infinite-loop bug
             />
         );
     }
 
-    get spinner () {
+    get spinner() {
         const { status } = this.state;
         const { showSpinner, spinnerColor } = this.props;
 
         return status === 1 && showSpinner ? (
             <View style={styles.loaderContainer}>
                 <ActivityIndicator
-                  size={'small'}
-                  color={spinnerColor}
-                  animating={true}
+                    size={'small'}
+                    color={spinnerColor}
+                    animating={true}
                 />
             </View>
         ) : false;
     }
 
-    render () {
+    render() {
         const { containerStyle } = this.props;
 
         return (
             <View
-              ref={(c) => { this._container = c; }}
-              pointerEvents={'none'}
-              style={[containerStyle, styles.container]}
-              onLayout={this._measureLayout}
+                ref={(c) => { this._container = c; }}
+                pointerEvents={'none'}
+                style={[containerStyle, styles.container]}
+                onLayout={this._measureLayout}
             >
-                { this.image }
-                { this.spinner }
+                {this.image}
+                {this.spinner}
             </View>
         );
     }
