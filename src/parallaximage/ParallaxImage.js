@@ -10,6 +10,7 @@ export default class ParallaxImage extends Component {
     static propTypes = {
         ...Image.propTypes,
         ImageLoader: PropTypes.function,
+        source: PropTypes.string,
         carouselRef: PropTypes.object, // passed from <Carousel />
         itemHeight: PropTypes.number, // passed from <Carousel />
         itemWidth: PropTypes.number, // passed from <Carousel />
