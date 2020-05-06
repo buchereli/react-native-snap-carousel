@@ -1104,11 +1104,7 @@ export default class Carousel extends Component {
         }, autoplayDelay);
     }
 
-<<<<<<< HEAD
-    stopAutoplay() {
-=======
     pauseAutoPlay () {
->>>>>>> origin/master
         this._autoplaying = false;
         clearTimeout(this._autoplayTimeout);
         clearTimeout(this._enableAutoplayTimeout);
